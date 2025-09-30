@@ -1,5 +1,3 @@
-Of course! Here is a comprehensive README file for your DynamicArray implementation, formatted in Markdown for your GitHub repository.
-
 JavaScript Dynamic Array
 A custom implementation of a dynamic array (similar to C++'s std::vector or Java's ArrayList) in modern JavaScript. This class provides a resizable array data structure that automatically manages its own storage, along with a rich API for manipulation and iteration, including higher-order methods like map, filter, and reduce.
 
