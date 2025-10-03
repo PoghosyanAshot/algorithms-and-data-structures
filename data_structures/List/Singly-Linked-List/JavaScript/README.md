@@ -1,5 +1,3 @@
-Of course! Here is a detailed README file for your SinglyLinkedList implementation, formatted in Markdown for GitHub.
-
 JavaScript Singly Linked List
 A comprehensive implementation of a singly linked list data structure in modern JavaScript. This class provides a classic node-based list with a full suite of methods for manipulation, traversal, and advanced algorithms like sorting and merging.
 
