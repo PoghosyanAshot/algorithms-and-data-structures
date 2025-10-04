@@ -275,126 +275,122 @@ class SinglyLinkedList {
         return;
     }
 
-    sort(compareFn = (a, b) => a - b) {
-        const arr = this.toArray();
-
-        const merge_sort = arr => {
-            if (arr.length <= 1) {
-                return arr;
+    sort(cmp = (a, b) => a - b) {
+        const merge_sort = (head, cmp) => {
+            if (!head || !head.next) {
+                return head;
             }
-            
-            const mid = (arr.length / 2) >> 0;
 
-            const left = arr.slice(0, mid);
-            const right = arr.slice(mid);
+            let slow = head;
+            let fast = head.next;
 
-            const sorted_left = merge_sort(left);
-            const sorted_right = merge_sort(right);
+            while (fast && fast.next) {
+                slow = slow.next;
+                fast = fast.next.next;
+            }
 
-            return merge(sorted_left, sorted_right);
+            const mid = slow.next;
+            slow.next = null;
+
+            const left = merge_sort(head, cmp);
+            const right = merge_sort(mid, cmp);
+
+            return merge(left, right, cmp);
         }
-        
-        const merge = (left, right) => {
-            const left_size = left.length;
-            const right_size = right.length;
-            const result = [];
 
-            let i = 0;
-            let j = 0;
-
-            while (i < left_size && j < right_size) {
-                if (compareFn(left[i], right[j]) <= 0) {
-                    result.push(left[i++]);
-                    continue;
+        const merge = (left, right, cmp) => {
+            const dummy = new Node(null);           
+            let current = dummy;
+            
+            while (left && right) {
+                if (cmp(left.value, right.value) <= 0) {
+                    current.next = left;
+                    left = left.next;
+                } else {
+                    current.next = right;
+                    right = right.next;
                 }
 
-                result.push(right[j++]);
+                current = current.next;
             }
 
-            while (i < left_size) {
-                result.push(left[i++]);
-            }
+            current.next = left || right;
 
-            while (j < right_size) {
-                result.push(right[j++]);
-            }
-
-            return result;
+            return dummy.next;
         }
-
-        const sorted_list = new SinglyLinkedList(merge_sort(arr));
-        this.#head = sorted_list.#head;
+        
+        this.#head = merge_sort(this.#head, cmp);
 
         return;
     }
 
-    merge(list, compareFn = (a, b) => a - b) {
+    merge(list, cmp = (a, b) => a - b) {
         const is_sorted = list => {
-            if (list.size() <= 1) {
+            if (!list || !list.next) {
                 return true;
             }
-            
-            list = list.toArray();
-            const size = list.length;
-            
-            if (compareFn(1, 2) <= 0) {
-                for (let i = 0; i < size - 1; ++i) {
-                    if (compareFn(list[i], list[i + 1]) > 0) {
-                        console.log("1");
+
+            if (cmp(1, 2) <= 0) {
+                while (list.next) {
+                    if (cmp(list.value, list.next.value) > 0) {
                         return false;
                     }
+
+                    list = list.next;
                 }
             } else {
-                for (let i = 0; i < size; ++i) {
-                    if (compareFn(list[i + 1], list[i]) <= 0) {
-                        console.log("2");
+                while (list.next) {
+                    if (cmp(list.next.value, list.value) <= 0) {
                         return false;
                     }
+                    
+                    list = list.next;
                 }
             }
 
             return true;
         }
 
-        if (!is_sorted(this) || !is_sorted(list)) {
+        if (!is_sorted(this.#head) || !is_sorted(list.#head)) {
             throw new ERROR("Can not merge unsorted list");
         }
 
-        const left = this.toArray();
-        const right = list.toArray();
+        const dummy = new Node(null);
+        let current = dummy;
 
-        const left_size = left.length;
-        const right_size = right.length;
-        
-        const result = [];
-
-        let i = 0;
-        let j = 0;
-
-        while (i < left_size && j < right_size) {
-            if (compareFn(left[i], right[j]) <= 0) {
-                result.push(left[i++]);
-                continue;
+        if (cmp(1, 2) <= 0) {
+            while (this.#head && list.#head) {
+                if (cmp(this.#head.value, list.#head.value) <= 0) {
+                    current.next = this.#head;
+                    this.#head = this.#head.next;
+                    current = current.next;
+                } else {
+                    current.next = list.#head;
+                    list.#head = list.#head.next;
+                    current = current.next;
+                }
             }
-            
-            result.push(right[j++]);
+        } else {
+            while (this.#head && list.#head) {
+                if (cmp(list.#head.value, this.#head.value) > 0) {
+                    current.next = this.#head;
+                    this.#head = this.#head.next;
+                } else {
+                    current.next = list.#head;
+                    list.#head = list.#head.next;
+                }
+                
+                current = current.next;
+            }
         }
 
-        while (i < left_size) {
-            result.push(left[i++]);
-        }
+        current.next = this.#head || list.#head;
 
-        while (j < right_size) {
-            result.push(right[j++]);
-        }
-
-        const merged_list = new SinglyLinkedList(result);
-
-        this.#head = merged_list.#head;
+        this.#head = dummy.next;
 
         return;
-    }
-    
+    } 
+       
     // utilities
 
     toArray() {
@@ -458,3 +454,9 @@ console.log('Reversed list:', [...list]);
 
 list.sort();
 console.log('Sorted list:', [...list]);
+
+const l2 = new SinglyLinkedList([1, 2, 3]);
+
+list.merge(l2); // merge two sorted lists
+
+console.log('Merged  list', [...list]); // list is now: 1 -> 2 -> 3 -> 10 -> 20 -> 30 -> 40
