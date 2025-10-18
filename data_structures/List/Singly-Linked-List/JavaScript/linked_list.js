@@ -14,7 +14,7 @@ class Node {
         this.#value = val;
     }
 
-    get next() { 
+    get next() {
         return this.#next;
     }
 
@@ -26,21 +26,21 @@ class Node {
 class SinglyLinkedList {
     #head = null;
     #size = 0;
-    
+
     constructor(iterable) {
         if (!iterable) {
             return;
         }
-        
+
         if (typeof iterable[Symbol.iterator] === "function") {
             let curent = null;
-            
+
             for (const item of iterable) {
                 if (!curent) {
                     this.push_back(item);
                     continue;
                 }
-                
+
                 this.push_back(item);
             }
 
@@ -53,7 +53,7 @@ class SinglyLinkedList {
     // size modifires
 
     size() {
-        return this.#size;   
+        return this.#size;
     }
 
     isEmpty() {
@@ -66,7 +66,7 @@ class SinglyLinkedList {
 
         return;
     }
-    
+
     // front access
 
     front() {
@@ -81,7 +81,7 @@ class SinglyLinkedList {
 
     push_front(val) {
         const tmp = this.#head;
-        
+
         this.#head = new Node(val);
         this.#head.next = tmp;
         ++this.#size;
@@ -95,10 +95,10 @@ class SinglyLinkedList {
             ++this.#size;
             return;
         }
-        
+
         let curent = this.#head;
 
-        while(curent.next) {
+        while (curent.next) {
             curent = curent.next;
         }
 
@@ -114,16 +114,16 @@ class SinglyLinkedList {
         }
 
         const tmp = this.#head;
-        
+
         this.#head = this.#head.next;
         --this.#size;
-        
+
         return tmp.value;
     }
 
     pop_back() {
         let is_one_element = true;
-        
+
         if (this.isEmpty()) {
             return;
         }
@@ -142,9 +142,9 @@ class SinglyLinkedList {
         }
 
         if (is_one_element) {
-            this.#head = null;   
+            this.#head = null;
         }
-        
+
         --this.#size;
 
         return curent.value;
@@ -185,7 +185,7 @@ class SinglyLinkedList {
         let prev = null;
 
         for (let i = 0; i < index; ++i) {
-            prev = curent;        
+            prev = curent;
             curent = curent.next;
         }
 
@@ -196,7 +196,7 @@ class SinglyLinkedList {
 
         return;
     }
-
+    
     erase(index) {
         if (index >= this.#size || index < 0) {
             return;
@@ -204,13 +204,13 @@ class SinglyLinkedList {
 
         if (index === 0) {
             this.pop_front();
-            
+
             return;
         }
 
         if (index === this.#size - 1) {
             this.pop_back();
-            
+
             return;
         }
 
@@ -248,7 +248,6 @@ class SinglyLinkedList {
                 --i;
                 ++count;
             }
-
         }
 
         return count;
@@ -257,9 +256,9 @@ class SinglyLinkedList {
     // algorithms
 
     reverse() {
-        const reverse_list = head => {
+        const reverse_list = (head) => {
             if (!head || !head.next) {
-                return head;   
+                return head;
             }
 
             const return_value = reverse_list(head.next);
@@ -268,7 +267,7 @@ class SinglyLinkedList {
             head.next = null;
 
             return return_value;
-        }
+        };
 
         this.#head = reverse_list(this.#head);
 
@@ -296,12 +295,12 @@ class SinglyLinkedList {
             const right = merge_sort(mid, cmp);
 
             return merge(left, right, cmp);
-        }
+        };
 
         const merge = (left, right, cmp) => {
-            const dummy = new Node(null);           
+            const dummy = new Node(null);
             let current = dummy;
-            
+
             while (left && right) {
                 if (cmp(left.value, right.value) <= 0) {
                     current.next = left;
@@ -317,15 +316,15 @@ class SinglyLinkedList {
             current.next = left || right;
 
             return dummy.next;
-        }
-        
+        };
+
         this.#head = merge_sort(this.#head, cmp);
 
         return;
     }
 
     merge(list, cmp = (a, b) => a - b) {
-        const is_sorted = list => {
+        const is_sorted = (list) => {
             if (!list || !list.next) {
                 return true;
             }
@@ -343,13 +342,13 @@ class SinglyLinkedList {
                     if (cmp(list.next.value, list.value) <= 0) {
                         return false;
                     }
-                    
+
                     list = list.next;
                 }
             }
 
             return true;
-        }
+        };
 
         if (!is_sorted(this.#head) || !is_sorted(list.#head)) {
             throw new ERROR("Can not merge unsorted list");
@@ -379,7 +378,7 @@ class SinglyLinkedList {
                     current.next = list.#head;
                     list.#head = list.#head.next;
                 }
-                
+
                 current = current.next;
             }
         }
@@ -389,8 +388,8 @@ class SinglyLinkedList {
         this.#head = dummy.next;
 
         return;
-    } 
-       
+    }
+
     // utilities
 
     toArray() {
@@ -398,7 +397,7 @@ class SinglyLinkedList {
         let curent = this.#head;
 
         while (curent) {
-            result.push(curent.value);       
+            result.push(curent.value);
             curent = curent.next;
         }
 
@@ -410,7 +409,7 @@ class SinglyLinkedList {
     }
 
     // iteration
-    
+
     [Symbol.iterator]() {
         let curent = this.#head;
 
@@ -423,40 +422,40 @@ class SinglyLinkedList {
                     return {
                         value: val,
                         done: false,
-                    }
+                    };
                 }
 
                 return {
                     value: undefined,
                     done: true,
-                }
-            }
-        }
+                };
+            },
+        };
     }
 }
 
 const list = new SinglyLinkedList([10, 20, 30]);
 
-list.push_front(5);    // list is now: 5 -> 10 -> 20 -> 30
-list.push_back(40);    // list is now: 5 -> 10 -> 20 -> 30 -> 40
-list.pop_front();      // list is now: 10 -> 20 -> 30 -> 40
+list.push_front(5); // list is now: 5 -> 10 -> 20 -> 30
+list.push_back(40); // list is now: 5 -> 10 -> 20 -> 30 -> 40
+list.pop_front(); // list is now: 10 -> 20 -> 30 -> 40
 
 // Access elements
 console.log(`Element at index 1: ${list.at(1)}`);
 console.log(`Front element: ${list.front()}`);
 
 // The list is iterable
-console.log('List contents:', [...list]);
+console.log("List contents:", [...list]);
 
 // Algorithms
 list.reverse();
-console.log('Reversed list:', [...list]); 
+console.log("Reversed list:", [...list]);
 
 list.sort();
-console.log('Sorted list:', [...list]);
+console.log("Sorted list:", [...list]);
 
 const l2 = new SinglyLinkedList([1, 2, 3]);
 
 list.merge(l2); // merge two sorted lists
 
-console.log('Merged  list', [...list]); // list is now: 1 -> 2 -> 3 -> 10 -> 20 -> 30 -> 40
+console.log("Merged  list", [...list]); // list is now: 1 -> 2 -> 3 -> 10 -> 20 -> 30 -> 40
