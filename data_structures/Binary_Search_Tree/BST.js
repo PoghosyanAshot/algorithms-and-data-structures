@@ -38,32 +38,7 @@ class BST {
     }
 
     get_height() {
-        if (this.is_empty()) {
-            return 0;
-        }
-
-        let height = 0;
-        const queue = new Queue(this.#size);
-        queue.enqueue(this.#root);
-
-        while (!queue.is_empty()) {
-            const level = queue.size();
-            ++height;
-
-            for (let i = 0; i < level; ++i) {
-                const node = queue.dequeue();
-
-                if (node.left) {
-                    queue.enqueue(node.left);
-                }
-
-                if (node.right) {
-                    queue.enqueue(node.right);
-                }
-            }
-        }
-
-        return height;
+        return this.#_get_height(this.#root);
     }
 
     // min & max
@@ -229,7 +204,6 @@ class BST {
         if (!node) {
             return;
         }
-
         this.#_inorder(node.left, result);
         result.push(node.value);
         this.#_inorder(node.right, result);
@@ -305,6 +279,12 @@ class BST {
 
     #accessor(node) {
         return this.#_find_min(node.right);
+    }
+
+    #_get_height(node) {
+        if (!node) return 0;
+
+        return Math.max(this.#_get_height(node.left), this.#_get_height(node.right)) + 1;
     }
 }
 
