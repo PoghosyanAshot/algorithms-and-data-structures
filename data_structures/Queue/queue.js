@@ -75,29 +75,29 @@ class Queue {
 
 module.exports = { Queue };
 
-try {
-    const q = new Queue(5);
-
-    q.enqueue(10);
-    q.enqueue(20);
-    q.enqueue(30);
-    q.print(); // [10, 20, 30]
-
-    console.log("Front:", q.peek()); // 10
-    console.log("Dequeued:", q.dequeue()); // 10
-    console.log("Dequeued:", q.dequeue()); // 20
-
-    q.enqueue(40);
-    q.enqueue(50);
-    q.enqueue(60);
-    q.enqueue(70); // Queue now full
-
-    q.print(); // [30, 40, 50, 60, 70]
-    console.log("Size:", q.size()); // 5
-    console.log("Full?", q.is_full()); // true
-
-    console.log("Dequeued:", q.dequeue()); // 30
-    q.print(); // [40, 50, 60, 70]
-} catch (err) {
-    console.error("❌ Error:", err.message);
-}
+// try {
+//     const q = new Queue(5);
+//
+//     q.enqueue(10);
+//     q.enqueue(20);
+//     q.enqueue(30);
+//     q.print(); // [10, 20, 30]
+//
+//     console.log("Front:", q.peek()); // 10
+//     console.log("Dequeued:", q.dequeue()); // 10
+//     console.log("Dequeued:", q.dequeue()); // 20
+//
+//     q.enqueue(40);
+//     q.enqueue(50);
+//     q.enqueue(60);
+//     q.enqueue(70); // Queue now full
+//
+//     q.print(); // [30, 40, 50, 60, 70]
+//     console.log("Size:", q.size()); // 5
+//     console.log("Full?", q.is_full()); // true
+//
+//     console.log("Dequeued:", q.dequeue()); // 30
+//     q.print(); // [40, 50, 60, 70]
+// } catch (err) {
+//     console.error("❌ Error:", err.message);
+// }
